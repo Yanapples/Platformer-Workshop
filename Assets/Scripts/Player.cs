@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -31,6 +31,14 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             rb.AddForce(Vector2.up * jumpHeight, ForceMode2D.Impulse);
+        }
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            currentSpeed = sprintSpeed;
+        }
+        if (Input.GetKeyDown(KeyCode.RightShift))
+        {
+            currentSpeed = walkSpeed;
         }
     }
 }

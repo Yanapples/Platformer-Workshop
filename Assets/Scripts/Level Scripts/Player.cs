@@ -24,7 +24,6 @@ public class Player : MonoBehaviour
     {
         if (gm.IsPlay)
         {
-            Debug.Log("Playing");
             InputHandler();
         }
     }

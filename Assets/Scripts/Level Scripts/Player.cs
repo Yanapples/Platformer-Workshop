@@ -8,17 +8,28 @@ public class Player : MonoBehaviour
     public float walkSpeed = 10;
     public float sprintSpeed = 20;
     public float jumpHeight = 5;
-
     private float currentSpeed = 10;
+
+    public GameManager gm;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        gm = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
     void Update()
+    {
+        if (gm.IsPlay)
+        {
+            Debug.Log("Playing");
+            InputHandler();
+        }
+    }
+
+    void InputHandler()
     {
         if (Input.GetKey(KeyCode.A))
         {
@@ -36,7 +47,7 @@ public class Player : MonoBehaviour
         {
             currentSpeed = sprintSpeed;
         }
-        if (Input.GetKeyDown(KeyCode.RightShift))
+        if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             currentSpeed = walkSpeed;
         }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public Player player;
+    public PlayerRun player;
     private Vector2 startPos;
     public GameObject winScreen;
     public GameObject loseScreen;
@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerRun>();
         startPos = player.transform.position;
     }
 

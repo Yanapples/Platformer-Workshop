@@ -1,26 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerRun : MonoBehaviour
 {
+    public TMP_Text debugText;
+
     private Rigidbody2D rb;
 
-    public float walkSpeed = 10;
-    public float sprintSpeed = 20;
-    public float jumpHeight = 5;
+    [SerializeField] private float walkSpeed = 10;
+    [SerializeField] private float sprintSpeed = 20;
+    [SerializeField] private float jumpHeight = 5;
+    [SerializeField] private float runAccelAmount = 10;
+    [SerializeField] private float runDeccelAmount = 10;
+    [SerializeField] private float velPower = 10;
 
-    private GameManager gm;
-
-    private enum MoveType { Translate, Forces, Velocity, MovePosition };
-    [SerializeField]
-    private MoveType moveType;
+    private enum MoveType { Translate, Forces, Velocity, MovePosition, AdjustedForces };
+    [SerializeField] private MoveType moveType;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        // gm = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
@@ -40,82 +42,83 @@ public class PlayerRun : MonoBehaviour
             case MoveType.MovePosition:
                 MovePositionMovement();
                 break;
-            //case MoveType.AdjustedVelocity:
-            //    AdjustedVelocityMovement();
-            //    break;
+            case MoveType.AdjustedForces:
+                AdjustedForcesMovement();
+                break;
         }
     }
 
     void TransformMovement()
     {
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.Translate(Vector2.left * walkSpeed * Time.deltaTime);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.Translate(Vector2.right * walkSpeed * Time.deltaTime);
-        }
+        int moveInput = (int)Input.GetAxisRaw("Horizontal");
+        transform.Translate(Vector2.right * walkSpeed * moveInput * Time.deltaTime);
+        //if (Input.GetKey(KeyCode.A))
+        //{
+        //    transform.Translate(Vector2.left * walkSpeed * Time.deltaTime);
+        //}
+        //if (Input.GetKey(KeyCode.D))
+        //{
+        //    transform.Translate(Vector2.right * walkSpeed * Time.deltaTime);
+        //}
     }
 
     void ForcesMovement()
     {
-        if (Input.GetKey(KeyCode.A))
-        {
-            rb.AddForce(Vector2.left * walkSpeed);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            rb.AddForce(Vector2.right * walkSpeed);
-        }
+        int moveInput = (int)Input.GetAxisRaw("Horizontal"); 
+        rb.AddForce(Vector2.right * walkSpeed * moveInput);
+        //if (Input.GetKey(KeyCode.A))
+        //{
+        //    rb.AddForce(Vector2.left * walkSpeed);
+        //}
+        //if (Input.GetKey(KeyCode.D))
+        //{
+        //    rb.AddForce(Vector2.right * walkSpeed);
+        //}
     }
 
     void VelocityMovement()
     {
-        if (Input.GetKey(KeyCode.A))
-        {
-            rb.velocity = Vector2.left * walkSpeed;
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            rb.velocity = Vector2.right * walkSpeed;
-        }
-        else
-        {
-            rb.velocity = Vector2.zero;
-        } 
-            
+        int moveInput = (int)Input.GetAxisRaw("Horizontal");
+        rb.velocity = new Vector2(walkSpeed * moveInput, rb.velocity.y);
+        //if (Input.GetKey(KeyCode.A))
+        //{
+        //    rb.velocity = new Vector2(-walkSpeed, rb.velocity.y * gravity);
+        //}
+        //else if (Input.GetKey(KeyCode.D))
+        //{
+        //    rb.velocity = new Vector2( walkSpeed, rb.velocity.y * gravity);
+        //}
+        //else
+        //{
+        //    rb.velocity = Vector2.zero;
+        //} 
     }
 
     void MovePositionMovement()
     {
-        if (Input.GetKey(KeyCode.A))
-        {
-            rb.MovePosition((Vector2)transform.position + Vector2.left * walkSpeed * Time.deltaTime);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            rb.MovePosition((Vector2)transform.position + Vector2.right * walkSpeed * Time.deltaTime);
-        }
+        int moveInput = (int)Input.GetAxisRaw("Horizontal");
+        rb.MovePosition((Vector2)transform.position + new Vector2(moveInput, 0) * walkSpeed * Time.deltaTime);
+        //if (Input.GetKey(KeyCode.A))
+        //{
+        //    rb.MovePosition((Vector2)transform.position + Vector2.left * walkSpeed * Time.deltaTime);
+        //}
+        //if (Input.GetKey(KeyCode.D))
+        //{
+        //    rb.MovePosition((Vector2)transform.position + Vector2.right * walkSpeed * Time.deltaTime);
+        //}
     }
 
-    void AdjustedVelocityMovement()
+    void AdjustedForcesMovement()
     {
-        if (Input.GetKey(KeyCode.A))
-        {
-            float targetSpeed = Mathf.Lerp(rb.velocity.x, walkSpeed, 1);
-            rb.velocity = new Vector2(-targetSpeed, rb.velocity.y);
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            float targetSpeed = Mathf.Lerp(rb.velocity.x, walkSpeed, 1);
-            rb.velocity = new Vector2(targetSpeed, rb.velocity.y);
-        }
-        else
-        {
-            float targetSpeed = Mathf.Lerp(rb.velocity.x, 0, 1);
-            rb.velocity = new Vector2(targetSpeed, rb.velocity.y);
-        }
+        int moveInput = (int)Input.GetAxisRaw("Horizontal");
+        float currenSpeed = rb.velocity.x;
+        float targetSpeed = moveInput * walkSpeed;
+        float speedDif = targetSpeed - currenSpeed;
+        float accelRate = (Mathf.Abs(targetSpeed) > Mathf.Abs(currenSpeed)) ? runAccelAmount : runDeccelAmount ;
+        float movement = Mathf.Abs(speedDif) * accelRate * Mathf.Sign(speedDif);
+        rb.AddForce(movement * Vector2.right);
+
+        // debugText.text = moveInput + "\n" + targetSpeed + "\n" + speedDif + "\n" + accelRate + "\n" + movement;
     }
 
     // How to craft better jumping
@@ -136,5 +139,4 @@ public class PlayerRun : MonoBehaviour
     // 14. Ability synergy -> gives better movement without raising complexity
     // 15. Dash
     // 16. Reduce acceleration when airborne
-
 }

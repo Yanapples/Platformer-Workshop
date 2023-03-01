@@ -10,10 +10,8 @@ public class PlayerRun : MonoBehaviour
     private Rigidbody2D rb;
 
     [SerializeField] private float walkSpeed = 10;
-    [SerializeField] private float jumpHeight = 5;
     [SerializeField] private float runAccelAmount = 10;
     [SerializeField] private float runDeccelAmount = 10;
-    [SerializeField] private float velPower = 10;
 
     private enum MoveType { Translate, Forces, Velocity, MovePosition, AdjustedForces };
     [SerializeField] private MoveType moveType;

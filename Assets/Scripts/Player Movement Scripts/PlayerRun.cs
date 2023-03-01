@@ -10,7 +10,6 @@ public class PlayerRun : MonoBehaviour
     private Rigidbody2D rb;
 
     [SerializeField] private float walkSpeed = 10;
-    [SerializeField] private float sprintSpeed = 20;
     [SerializeField] private float jumpHeight = 5;
     [SerializeField] private float runAccelAmount = 10;
     [SerializeField] private float runDeccelAmount = 10;
@@ -66,59 +65,31 @@ public class PlayerRun : MonoBehaviour
     {
         int moveInput = (int)Input.GetAxisRaw("Horizontal"); 
         rb.AddForce(Vector2.right * walkSpeed * moveInput);
-        //if (Input.GetKey(KeyCode.A))
-        //{
-        //    rb.AddForce(Vector2.left * walkSpeed);
-        //}
-        //if (Input.GetKey(KeyCode.D))
-        //{
-        //    rb.AddForce(Vector2.right * walkSpeed);
-        //}
     }
 
     void VelocityMovement()
     {
         int moveInput = (int)Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(walkSpeed * moveInput, rb.velocity.y);
-        //if (Input.GetKey(KeyCode.A))
-        //{
-        //    rb.velocity = new Vector2(-walkSpeed, rb.velocity.y * gravity);
-        //}
-        //else if (Input.GetKey(KeyCode.D))
-        //{
-        //    rb.velocity = new Vector2( walkSpeed, rb.velocity.y * gravity);
-        //}
-        //else
-        //{
-        //    rb.velocity = Vector2.zero;
-        //} 
     }
 
     void MovePositionMovement()
     {
         int moveInput = (int)Input.GetAxisRaw("Horizontal");
         rb.MovePosition((Vector2)transform.position + new Vector2(moveInput, 0) * walkSpeed * Time.deltaTime);
-        //if (Input.GetKey(KeyCode.A))
-        //{
-        //    rb.MovePosition((Vector2)transform.position + Vector2.left * walkSpeed * Time.deltaTime);
-        //}
-        //if (Input.GetKey(KeyCode.D))
-        //{
-        //    rb.MovePosition((Vector2)transform.position + Vector2.right * walkSpeed * Time.deltaTime);
-        //}
     }
 
     void AdjustedForcesMovement()
     {
         int moveInput = (int)Input.GetAxisRaw("Horizontal");
-        float currenSpeed = rb.velocity.x;
+        float currentSpeed = rb.velocity.x;
         float targetSpeed = moveInput * walkSpeed;
-        float speedDif = targetSpeed - currenSpeed;
-        float accelRate = (Mathf.Abs(targetSpeed) > Mathf.Abs(currenSpeed)) ? runAccelAmount : runDeccelAmount ;
-        float movement = Mathf.Abs(speedDif) * accelRate * Mathf.Sign(speedDif);
+        float speedDif = targetSpeed - currentSpeed;
+        float accelRate = (Mathf.Abs(targetSpeed) > Mathf.Abs(currentSpeed)) ? runAccelAmount : runDeccelAmount ;
+        float movement = speedDif * accelRate;
         rb.AddForce(movement * Vector2.right);
 
-        // debugText.text = moveInput + "\n" + targetSpeed + "\n" + speedDif + "\n" + accelRate + "\n" + movement;
+        debugText.text = moveInput + "\n" + targetSpeed + "\n" + speedDif + "\n" + accelRate + "\n" + movement;
     }
 
     // How to craft better jumping

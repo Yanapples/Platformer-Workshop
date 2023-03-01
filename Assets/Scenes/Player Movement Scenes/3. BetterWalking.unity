@@ -3527,12 +3527,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugText: {fileID: 1895118397}
-  walkSpeed: 10
+  walkSpeed: 25
   jumpHeight: 5
-  runAccelAmount: 2
-  runDeccelAmount: 10
+  runAccelAmount: 1
+  runDeccelAmount: 20
   velPower: 1
-  moveType: 4
+  moveType: 0
 --- !u!1 &709586347
 GameObject:
   m_ObjectHideFlags: 0
@@ -3882,7 +3882,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1895118396
 RectTransform:
   m_ObjectHideFlags: 0

@@ -87,7 +87,7 @@ public class PlayerRun : MonoBehaviour
         float movement = speedDif * accelRate;
         rb.AddForce(movement * Vector2.right);
 
-        debugText.text = moveInput + "\n" + targetSpeed + "\n" + speedDif + "\n" + accelRate + "\n" + movement;
+        if (debugText) debugText.text = moveInput + "\n" + targetSpeed + "\n" + speedDif + "\n" + accelRate + "\n" + movement;
     }
 
     // How to craft better jumping

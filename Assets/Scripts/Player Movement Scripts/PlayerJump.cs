@@ -119,8 +119,6 @@ public class PlayerJump : MonoBehaviour
 
             playerJump.jumpForce = EditorGUILayout.FloatField("Jump Force", playerJump.jumpForce);
 
-            playerJump.enableJumpCut = EditorGUILayout.Toggle("Enable Jump Cut?", playerJump.enableJumpCut);
-
             playerJump.enableGroundChecks = EditorGUILayout.Toggle("Enable Ground Checks?", playerJump.enableGroundChecks);
             if (playerJump.enableGroundChecks)
             {
@@ -128,6 +126,8 @@ public class PlayerJump : MonoBehaviour
                 // playerJump.groundLayer = EditorGUILayout.LayerField("Ground Layer", playerJump.groundLayer);
                 playerJump.groundLayer = LayerMaskField("Ground Layer", playerJump.groundLayer);
             }
+
+            playerJump.enableJumpCut = EditorGUILayout.Toggle("Enable Jump Cut?", playerJump.enableJumpCut);
 
             playerJump.increaseGWhenFalling = EditorGUILayout.Toggle("Enable Increased Gravity When Falling?", playerJump.increaseGWhenFalling);
             if (playerJump.increaseGWhenFalling)

@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class PlayerAudio : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private AudioSource jump;
+    [SerializeField] private AudioSource die;
+    [SerializeField] private AudioSource collect;
+
+    public void Jump()
     {
-        
+        jump.Play();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Die()
     {
-        
+        die.Play();
+    }
+
+    public void Collect()
+    {
+        collect.Play();
     }
 }

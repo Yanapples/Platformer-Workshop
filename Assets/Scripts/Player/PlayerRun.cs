@@ -1,18 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Events;
 using UnityEngine;
 using TMPro;
 
 public class PlayerRun : MonoBehaviour
 {
-    public TMP_Text debugText;
-    public TMP_Text displayText;
-
-    private Rigidbody2D rb;
+    [HideInInspector] public TMP_Text debugText;
+    [HideInInspector] public TMP_Text displayText;
 
     [SerializeField] private float walkSpeed = 10;
     [SerializeField] private float runAccelAmount = 10;
     [SerializeField] private float runDeccelAmount = 10;
+
+    private Rigidbody2D rb;
 
     private enum MoveType { Translate, Forces, Velocity, MovePosition, AdjustedForces };
     [SerializeField] private MoveType moveType;

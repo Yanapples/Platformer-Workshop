@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Events;
 using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
@@ -8,19 +9,21 @@ using UnityEditorInternal;
 public class PlayerJump : MonoBehaviour
 {
 
-    [SerializeField] private float jumpForce = 2;
-    [SerializeField] private bool enableGroundChecks;
-    [SerializeField] private Transform groundCheck;
-    [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private bool enableJumpCut = true;
-    [SerializeField] private bool increaseGWhenFalling = true;
-    [SerializeField] private float fallingGravity = 5;
-    [SerializeField] private float maxFallSpeed = 10;
-    [SerializeField] private bool enableCoyoteTime = true;
-    [SerializeField] private float coyoteTime = 0.1f;
-    [SerializeField] private bool enableJumpTimeCooldown = true;
-    [SerializeField] private float jumpInputBuffer = 0.1f;
-    [SerializeField] private float defaultGravity = 1;
+    [HideInInspector] [SerializeField] private float jumpForce = 2;
+    [HideInInspector] [SerializeField] private bool enableGroundChecks;
+    [HideInInspector] [SerializeField] private Transform groundCheck;
+    [HideInInspector] [SerializeField] private LayerMask groundLayer;
+    [HideInInspector] [SerializeField] private bool enableJumpCut;
+    [HideInInspector] [SerializeField] private bool increaseGWhenFalling;
+    [HideInInspector] [SerializeField] private float fallingGravity = 5;
+    [HideInInspector] [SerializeField] private float maxFallSpeed = 10;
+    [HideInInspector] [SerializeField] private bool enableCoyoteTime;
+    [HideInInspector] [SerializeField] private float coyoteTime = 0.1f;
+    [HideInInspector] [SerializeField] private bool enableJumpTimeCooldown;
+    [HideInInspector] [SerializeField] private float jumpInputBuffer = 0.1f;
+    [HideInInspector] [SerializeField] private float defaultGravity = 1;
+
+    [SerializeField] private AudioSource jump;
 
     private Rigidbody2D rb;
     private float timeSinceLastGrounded = 0;
@@ -39,7 +42,7 @@ public class PlayerJump : MonoBehaviour
         timeSinceLastGrounded += Time.deltaTime;
         // If the player presses the spacebar we jump
         CheckGrounded();
-        if (Input.GetKeyDown(KeyCode.Space)) AttemptJump();
+        if (Input.GetKeyDown(KeyCode.Space) && CanJump()) Jump();
         if (Input.GetKeyUp(KeyCode.Space) && enableJumpCut) ReleasedJump();
         RegulatePlayerVelocity();
     }
@@ -56,11 +59,6 @@ public class PlayerJump : MonoBehaviour
     private void ReleasedJump()
     {
         if (enableJumpCut && rb.velocity.y > 0) rb.velocity = new Vector2(rb.velocity.x, 0);
-    }
-
-    private void AttemptJump()
-    {
-        if (CanJump()) Jump();
     }
 
     private bool CanJump()
@@ -89,6 +87,8 @@ public class PlayerJump : MonoBehaviour
             force -= rb.velocity.y;
 
         rb.AddForce(Vector2.up * force, ForceMode2D.Impulse);
+
+        if (jump) jump.Play();
     }
 
     private void CheckGrounded()
@@ -112,10 +112,14 @@ public class PlayerJump : MonoBehaviour
     [CustomEditor(typeof(PlayerJump)), CanEditMultipleObjects]
     public class PlayerJumpEditor : Editor
     {
-        LayerMask myLayerMask = new LayerMask();
+        public PlayerJump playerJump;
+        public void Awake()
+        {
+            playerJump = (PlayerJump)target;
+
+        }
         public override void OnInspectorGUI()
         {
-            var playerJump = target as PlayerJump;
 
             playerJump.jumpForce = EditorGUILayout.FloatField("Jump Force", playerJump.jumpForce);
 
@@ -145,6 +149,9 @@ public class PlayerJump : MonoBehaviour
             if (playerJump.enableJumpTimeCooldown)
                 playerJump.jumpInputBuffer = EditorGUILayout.FloatField("Jump Time Cooldown", playerJump.jumpInputBuffer);
 
+            DrawDefaultInspector();
+
+            EditorUtility.SetDirty(playerJump);
         }
 
         static LayerMask LayerMaskField(string label, LayerMask layerMask)

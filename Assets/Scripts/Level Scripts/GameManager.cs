@@ -1,33 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public PlayerRun player;
+    [SerializeField] private GameObject winScreen;
+    [SerializeField] private GameObject loseScreen;
+    private Transform player;
     private Vector2 startPos;
-    public GameObject winScreen;
-    public GameObject loseScreen;
 
     public bool IsPlay { get; set; } = true;
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerRun>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         startPos = player.transform.position;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        Restart();
     }
 
     public void Lose()
     {
-        loseScreen.SetActive(true);
-        IsPlay = false;
-        Time.timeScale = 0;
+        //loseScreen.SetActive(true);
+        //IsPlay = false;
+        //Time.timeScale = 0;
+        Debug.Log("Dead");
     }
 
     public void Win()
@@ -41,11 +37,14 @@ public class GameManager : MonoBehaviour
     {
         if (IsPlay == false && Input.GetKeyDown(KeyCode.R))
         {
-            IsPlay = true;
-            player.transform.position = startPos;
-            winScreen.SetActive(false);
-            loseScreen.SetActive(false);
-            Time.timeScale = 1;
+            //IsPlay = true;
+            //player.position = startPos;
+            //winScreen.SetActive(false);
+            //loseScreen.SetActive(false);
+            //Time.timeScale = 1;
+
+            Scene scene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(scene.name);
         }
     }
 }

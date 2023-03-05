@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class EnemyMace : MonoBehaviour
+public class EnemyTouch : MonoBehaviour
 {
     [SerializeField] private UnityEvent onPlayerTouch;
 

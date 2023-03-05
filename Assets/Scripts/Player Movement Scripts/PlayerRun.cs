@@ -6,6 +6,7 @@ using TMPro;
 public class PlayerRun : MonoBehaviour
 {
     public TMP_Text debugText;
+    public TMP_Text displayText;
 
     private Rigidbody2D rb;
 
@@ -20,15 +21,21 @@ public class PlayerRun : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        DisplayMovement();
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
+    {
+        HandleMovement();
+    }
+
+    void HandleMovement()
     {
         switch (moveType)
         {
-            case MoveType.Translate: 
-                TransformMovement();
+            case MoveType.Translate:
+                TranslateMovement();
                 break;
             case MoveType.Forces:
                 ForcesMovement();
@@ -45,7 +52,7 @@ public class PlayerRun : MonoBehaviour
         }
     }
 
-    void TransformMovement()
+    void TranslateMovement()
     {
         int moveInput = (int)Input.GetAxisRaw("Horizontal");
         transform.Translate(Vector2.right * walkSpeed * moveInput * Time.deltaTime);
@@ -90,6 +97,24 @@ public class PlayerRun : MonoBehaviour
         if (debugText) debugText.text = moveInput + "\n" + targetSpeed + "\n" + speedDif + "\n" + accelRate + "\n" + movement;
     }
 
+    public void NextMovement()
+    {
+        if (moveType == MoveType.AdjustedForces) moveType = MoveType.Translate;
+        else moveType++;
+        DisplayMovement();
+    }
+
+    public void PreviousMovement()
+    {
+        if (moveType == MoveType.Translate) moveType = MoveType.AdjustedForces;
+        else moveType--;
+        DisplayMovement();
+    }
+
+    private void DisplayMovement()
+    {
+        if (displayText) displayText.text = "Movement Type:\n" + moveType.ToString();
+    }
     // How to craft better jumping
 
     //  1. Increase fall speed

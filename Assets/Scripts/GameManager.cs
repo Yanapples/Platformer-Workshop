@@ -13,12 +13,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float defaultVolume;
     [Range(0f, 1f)]
     [SerializeField] private float inactiveVolume;
+    [SerializeField] private AudioSource win;
+    [SerializeField] private AudioSource lose;
 
     public bool IsPlay { get; set; } = true;
     // Start is called before the first frame update
     void Start()
     {
-        bgm.volume = defaultVolume;
+        SetBGMVolume(defaultVolume);
     }
 
     private void Update()
@@ -31,28 +33,32 @@ public class GameManager : MonoBehaviour
         loseScreen.SetActive(true);
         IsPlay = false;
         Time.timeScale = 0;
-        bgm.volume = inactiveVolume;
+        SetBGMVolume(inactiveVolume);
+
+        if (lose) lose.Play();
     }
 
     public void Win()
     {
         winScreen.SetActive(true);
         Time.timeScale = 0;
-        bgm.volume = inactiveVolume;
+        SetBGMVolume(inactiveVolume);
+
+        if (win) win.Play();
     }
 
     public void Pause()
     {
         Time.timeScale = 0f;
         pauseScreen.SetActive(true);
-        bgm.volume = inactiveVolume;
+        SetBGMVolume(inactiveVolume);
     }
 
     public void Resume()
     {
         Time.timeScale = 1f;
         pauseScreen.SetActive(false);
-        bgm.volume = defaultVolume;
+        SetBGMVolume(defaultVolume);
     }
 
     public void Restart()
@@ -60,7 +66,12 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         Scene scene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(scene.name);
-        bgm.volume = defaultVolume;
+        SetBGMVolume(defaultVolume);
+    }
+
+    private void SetBGMVolume(float volume)
+    {
+        if (bgm) bgm.volume = volume;
     }
 
     public void Quit()

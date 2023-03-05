@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class EnemyTouch : MonoBehaviour
+public class Interactable : MonoBehaviour
 {
     [SerializeField] private UnityEvent onPlayerTouch;
 

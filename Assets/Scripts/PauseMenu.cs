@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PauseMenu : MonoBehaviour
 {
-    [SerializeField] private GameObject pauseMenuCanvas;
+    [SerializeField] private GameObject pauseScreen;
 
     // Update is called once per frame
     void Update()
@@ -15,13 +15,13 @@ public class PauseMenu : MonoBehaviour
     public void Pause()
     {
         Time.timeScale = 0f;
-        pauseMenuCanvas.SetActive(true);
+        pauseScreen.SetActive(true);
     }
 
     public void Resume()
     {
         Time.timeScale = 1f;
-        pauseMenuCanvas.SetActive(false);
+        pauseScreen.SetActive(false);
     }
 
     public void Quit()

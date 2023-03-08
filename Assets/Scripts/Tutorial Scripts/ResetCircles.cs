@@ -13,13 +13,14 @@ public class ResetCircles : MonoBehaviour
     private Vector3 startPos3;
 
     private float timePassed;
-    public float interval = 5;
+    private float interval = 3;
+
     // Start is called before the first frame update
     void Start()
     {
-        startPos1 = circle1.transform.position;
-        startPos2 = circle2.transform.position;
-        startPos3 = circle3.transform.position;
+        if (circle1) startPos1 = circle1.transform.position;
+        if (circle2) startPos2 = circle2.transform.position;
+        if (circle3) startPos3 = circle3.transform.position;
     }
 
     // Update is called once per frame
@@ -28,12 +29,11 @@ public class ResetCircles : MonoBehaviour
         timePassed += Time.deltaTime;
         if (timePassed > interval)
         {
-            Debug.Log("time passed!");
-            circle1.transform.position = startPos1;
-            circle2.transform.position = startPos2;
-            circle3.transform.position = startPos3;
-            circle2.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-            circle3.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            if (circle1) circle1.transform.position = startPos1;
+            if (circle2) circle2.transform.position = startPos2;
+            if (circle3) circle3.transform.position = startPos3;
+            if (circle2) circle2.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            if (circle3) circle3.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             timePassed -= interval;
         }
     }

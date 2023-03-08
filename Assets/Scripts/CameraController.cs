@@ -30,6 +30,7 @@ public class CameraController : MonoBehaviour
 
     private void Start()
     {
+        if (!target) target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         cam = GetComponent<Camera>();
         camVerticalSize = cam.orthographicSize;
         camHorizontalSize = camVerticalSize * (1920f / 1080f);
@@ -55,26 +56,11 @@ public class CameraController : MonoBehaviour
         float x = Mathf.Clamp(targetPos.x, LeftBound + camHorizontalSize, RightBound - camHorizontalSize);
         float y = Mathf.Clamp(targetPos.y, BottomBound + camVerticalSize, TopBound - camVerticalSize);
         return new Vector3(x, y, targetPos.z);
-        //if (LeftPosition < LeftBound)
-        //{
-        //    transform.position = new Vector3(LeftBound + camHorizontalSize, transform.position.y, -10f);
-        //}
-        //else if (RightPosition > RightBound)
-        //{
-        //    transform.position = new Vector3(RightBound - camHorizontalSize, transform.position.y, -10f);
-        //}
-        //else if (BottomPosition < BottomBound)
-        //{
-        //    transform.position = new Vector3(transform.position.x, BottomBound + camVerticalSize, -10f);
-        //}
-        //else if (TopPosition > TopBound)
-        //{
-        //    transform.position = new Vector3(transform.position.x, TopBound - camVerticalSize, -10f);
-        //}
     }
 
     private void OnDrawGizmos()
     {
+        Gizmos.color = Color.yellow;
         Gizmos.DrawLine(new Vector3(LeftBound, TopBound, 0), new Vector3(LeftBound, BottomBound, 0));
         Gizmos.DrawLine(new Vector3(LeftBound, BottomBound, 0), new Vector3(RightBound, BottomBound, 0));
         Gizmos.DrawLine(new Vector3(RightBound, BottomBound, 0), new Vector3(RightBound, TopBound, 0));

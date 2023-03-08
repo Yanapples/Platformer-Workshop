@@ -5,7 +5,7 @@ public class ReadOnlyAttribute : PropertyAttribute
 {
    
 }
-
+#if UNITY_EDITOR
 /// <summary>
 /// Allows you to add '[ReadOnly]' before a variable so that it is shown but not editable in the inspector.
 /// Small but useful script, to make your inspectors look pretty and useful :D
@@ -20,5 +20,5 @@ public class ReadOnlyPropertyDrawer : PropertyDrawer
 		GUI.enabled = true;
 	}
 }
-
+#endif
 // Learn More with this Tutorial: https://youtu.be/r3nwTGLHygI

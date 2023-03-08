@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine;
 using UnityEditor;
-using UnityEditorInternal;
 
 public class PlayerJump : MonoBehaviour
 {
@@ -108,7 +107,7 @@ public class PlayerJump : MonoBehaviour
         Gizmos.color = Color.green;
         if (groundCheck) Gizmos.DrawWireCube(groundCheck.position, groundCheck.localScale);
     }
-
+#if UNITY_EDITOR
     [CustomEditor(typeof(PlayerJump)), CanEditMultipleObjects]
     public class PlayerJumpEditor : Editor
     {
@@ -185,6 +184,7 @@ public class PlayerJump : MonoBehaviour
             return layerMask;
         }
     }
+#endif
 }
 
 // Note to self: How to craft better jumping
